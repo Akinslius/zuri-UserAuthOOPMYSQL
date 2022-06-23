@@ -33,12 +33,12 @@ public function handleForm(){
             $this->country = $_POST['country'];
             $this->register($this->fullname, $this->email, $this->password, $this->confirmPassword, $this->country, $this->gender);
             break;
-        case isset($_POST['login']):
-            //unpack all data for login
-            $this->email = $_POST['email'];
-            $this->password = $_POST['password'];
-            $this->login($this->email, $this->password);
-            break;
+        // case isset($_POST['login']):
+        //     //unpack all data for login
+        //     $this->email = $_POST['email'];
+        //     $this->password = $_POST['password'];
+        //     $this->login($this->email, $this->password);
+        //     break;
         case isset($_POST['logout']):
             //unpack all data for logout
             $this->email = $_POST['email'];
@@ -66,9 +66,63 @@ public function handleForm(){
 }
 
 
-
-
-
 }
+
+
+
+class LoginController extends UserAuth{
+
+    
+    private $email;
+    public $password;
+    
+    public function __construct($email,$password){
+       $this->email= $email; 
+       $this->password= $password; 
+    }
+    
+    public function handleLogin(){
+    
+        
+            if(isset($_POST['login'])){
+                 //unpack all data for login
+                 $this->email = $_POST['email'];
+                 $this->password = $_POST['password'];
+                 $this->login($this->email, $this->password);
+
+            }
+        }
+
+    }
+               
+    //             break;
+    //         case isset($_POST['logout']):
+    //             //unpack all data for logout
+    //             $this->email = $_POST['email'];
+    //             $this->logout($this->email);
+    //             break;
+    //         case isset($_POST['delete']):
+    //             //unpack all data for deleting
+    //             $this->email = $_POST['email'];
+    //             $this->deleteUser($this->email);
+    //             break;
+    //         case isset($_POST['reset']):
+    //             //unpack all data for updating password
+    //             $this->email = $_POST['email'];
+    //             $this->password = $_POST['password'];
+    //             $this->updateUser($this->email, $this->password);
+    //             break;
+    //         case isset($_POST['all']):
+    //             //unpack all data for getting all users
+    //             $this->getAllUsers();
+    //             break;
+    //         default:
+    //             echo 'No form was submitted';
+    //             break;
+    //     }
+    // }
+    
+    
+    // }
 
 

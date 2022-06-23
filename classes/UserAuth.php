@@ -13,13 +13,14 @@ class UserAuth extends Dbh{
     public function checkEmailExist($email){
         // $conn = $this->connect();
         //my database connection is in pdo thats why i used count anf fetchcolumn
-         $sql = " SELECT COUNT(*) FROM `students` WHERE `email` = '$email' ";
+         $sql = " SELECT * FROM `students` WHERE `email` = '$email' ";
         //  $result = mysqli_query($conn, $sql);
-         $result = $this->connect()->query($sql);
+        $result = mysqli_query($conn, $sql);
+        //  $result = $this->connect()->query($sql);
     
        //fetchColumn returns the numbers columns affected by our last query
-       $count = $result->fetchColumn();
-        if($count > 0){
+    //    $count = $result->num_rows;
+        if($result-> num_rows > 0){
             return true;
         } else {
             return false;
@@ -77,16 +78,39 @@ class UserAuth extends Dbh{
 
 
     public function login($email, $password){
-        $conn = $this->db->connect();
-        $sql = "SELECT * FROM `students` WHERE `email`='$email' AND `password`='$password'";
-        $result = $conn->query($sql);
-        if($result->num_rows > 0){
-            $_SESSION['email'] = $email;
-            header("Location: ../dashboard.php");
-        } else {
-            header("Location: forms/login.php");
-        }
+        $conn = $this->connect();
+        $sql = "SELECT * FROM `students` WHERE `email`='$email' ";
+        $result = mysqli_query($conn, $sql);
+        // $count = $result->fetchColumn();
+        if ($result->num_rows > 0) {
+            $row = mysqli_fetch_assoc($result);
+       
+            if ($row['email'] == $email and $row['password'] == $password) {
+                $_SESSION['fullname'] = $row['full_names'];
+                $_SESSION['email'] = $row['email'];
+        
+                echo '<script>alert("Welcome ' . $_SESSION['fullname'] . ' ");
+                        window.location="dashboard.php";
+                        </script>';
+                    }else {
+                        echo '<script>alert("Incorrect Email or Password");
+                        window.location="forms/login.php";
+                        </script>';
+                        
+            }
+
+            }else{
+                echo '<script>alert("User not found, please register");
+        window.location="forms/register.php";
+        </script>';
+        
+
+            }
+
+
+            
     }
+
 
     public function getUser($username){
         $conn = $this->db->connect();

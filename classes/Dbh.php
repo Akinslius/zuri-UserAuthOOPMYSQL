@@ -2,34 +2,23 @@
 
 class Dbh {
     protected function connect(){ 
-        try {
+        
+            $host = "localhost";
             $username = "root";
             $password = "";
-            $dbh = new PDO('mysql:host=localhost; dbname=zuriphp',$username,$password);
+            $db_name = "zuriphp";
+            $dbh = mysqli_connect($host,$username,$password,$db_name);
+
+            if(!$dbh){
+                echo "<script> alert('Error connecting to the database') </script>";
+            }
+        
             return $dbh;
              
-        } catch (PDOException $error) {
-            echo "Error connecting to the database";
-            die();
-            
-        }
-
-
-    }
+        
 
 }
+}
 
-
-// class Dbh{
-//     public $host = "localhost";
-//     public $user = "root";
-//     public $password = "";
-//     public $db_name = "zuriphp";
-//     public $con;
-  
-//     public function connect(){
-//       $this->con = mysqli_connect($this->host, $this->user, $this->password, $this->db_name);
-     
-//     }
     
-//   }
+?>

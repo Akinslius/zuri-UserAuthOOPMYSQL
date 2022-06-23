@@ -6,13 +6,6 @@ require 'classes/Route.php';
 
 
 
-
-if(isset($_POST['register'])){
-
-    
-}
-
-
 switch(true){
     case isset($_POST['register']):
         //extract the $_POST array values for name, password and email
@@ -31,8 +24,8 @@ switch(true){
             $email = $_POST['email'];
             $password = $_POST['password'];
 
-            $route = new formController($email, $password);
-            $route->handleForm();
+            $route = new LoginController($email, $password);
+            $route->handleLogin();
         
         break;
     case isset($_POST["reset"]):

@@ -35,7 +35,7 @@
      <h1 class="">
        Welcome to Zuri Authentication 
        <?php session_start();
-        if(isset($_SESSION['username'])){ echo $_SESSION['username'];} ?>
+        if(isset($_SESSION['fullname'])){ echo $_SESSION['fullname'];} ?>
     </h1>
     <br>
       <h2 style="align-content: center">
