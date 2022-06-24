@@ -1,3 +1,12 @@
+<?php
+session_start();
+if (!isset($_SESSION['fullname'])) {
+
+  header('location:forms/login.php');
+
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +29,7 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item f-right">
-      <form action="php/action.php" method="POST" style=" background-color: inherit">
+      <form action="action.php" method="POST" style=" background-color: inherit">
         <button type="submit" name="logout" style="background-color: transparent; border: none">Logout</button>
      </form>
       </li>
@@ -34,8 +43,8 @@
 ?>
      <h1 class="">
        Welcome to Zuri Authentication 
-       <?php session_start();
-        if(isset($_SESSION['fullname'])){ echo $_SESSION['fullname'];} ?>
+      <span class="text-primary"> <?php 
+         echo $_SESSION['fullname'] ; ?> </span> 
     </h1>
     <br>
       <h2 style="align-content: center">
@@ -43,7 +52,7 @@
       </h2>
     </div>
 
-     <form action="./action.php" method="POST" class="form" style="text-align: center; margin-top: 5%">
+     <form action="action.php" method="POST" class="form" style="text-align: center; margin-top: 5%">
         <button class="btn btn-primary" name="all">
         Show All Users
        </button>

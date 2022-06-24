@@ -1,119 +1,112 @@
 <?php
+// Include connection page
 include_once 'Dbh.php';
 session_start();
 
+
 class UserAuth extends Dbh{
-    // private static $db;
-
-    // public function __construct(){
-    //     $this->db = new Dbh();
-    // }
-
-
+   
+// Method fro checking if Email exist in database
     public function checkEmailExist($email){
-        // $conn = $this->connect();
-        //my database connection is in pdo thats why i used count anf fetchcolumn
+         $conn = $this->connect();
+        //query
          $sql = " SELECT * FROM `students` WHERE `email` = '$email' ";
-        //  $result = mysqli_query($conn, $sql);
         $result = mysqli_query($conn, $sql);
-        //  $result = $this->connect()->query($sql);
-    
-       //fetchColumn returns the numbers columns affected by our last query
-    //    $count = $result->num_rows;
         if($result-> num_rows > 0){
+            // If email exist return true
             return true;
         } else {
+            // If email does not exist return false
             return false;
         }
     }
 
-
+// Method to check if the password match
     public function confirmPasswordMatch($password, $confirmPassword){
         //method to check if the password match
         if($password === $confirmPassword){
+            // If password match return true
             return true;
         } else {
+            //If password did not match return false
             return false;
         }
     }
 
 
-
+//Method for registering 
     public function register($fullname, $email, $password, $confirmPassword, $country, $gender){
-        //connection from dbh.php 
+        //calling the connection method 
         $conn = $this->connect();
-        //calling the checkeMailExist method
+        // calling the checkeMailExist method
         if($this->checkEmailExist($email) == true){
-          
-
+            // If user exist
             echo '<script>alert("User already registered");
             window.location="forms/register.php";
             </script>';
-
         }else{
             //calling the confirmPasswordmatch method
             if($this->confirmPasswordMatch($password, $confirmPassword) == true){
+                // If password match, submit data into the database
                 $sql = "INSERT INTO `students` (`full_names`, `email`, `password`, `country`, `gender`) VALUES ('$fullname','$email', '$password', '$country', '$gender')";
                 if($conn->query($sql)){
+                    // If submitted
                     echo '<script>alert("User Successfully registered");
                     window.location="forms/login.php";
                     </script>';
                 } else {
+                    // If not submitted
                     echo '<script>alert("Technical Error, failed to register");
                     window.location="forms/register.php";
                     </script>';
-                    // echo "Opps". $conn->error;
                 }
+                // If password doesn't match 
             }elseif($this->confirmPasswordMatch($password, $confirmPassword) == false){
                 echo '<script>alert("Password does not Match!!!");
                 window.location="forms/register.php";
-                </script>';
-                    
+                </script>'; 
             }
-
-        }
-        
+        } 
     }
 
 
-
+// Method for login
     public function login($email, $password){
+        // Connection
         $conn = $this->connect();
+        // select all from table name where the user email match the one in database
         $sql = "SELECT * FROM `students` WHERE `email`='$email' ";
         $result = mysqli_query($conn, $sql);
-        // $count = $result->fetchColumn();
         if ($result->num_rows > 0) {
+            //fetch the row
             $row = mysqli_fetch_assoc($result);
-       
+       //Check if the email and password the user provided match the one in database
             if ($row['email'] == $email and $row['password'] == $password) {
+                // if true extract fullname and email using a session
                 $_SESSION['fullname'] = $row['full_names'];
                 $_SESSION['email'] = $row['email'];
-        
+                // Welcome the user and redirect to dashborad page
                 echo '<script>alert("Welcome ' . $_SESSION['fullname'] . ' ");
                         window.location="dashboard.php";
                         </script>';
                     }else {
-                        echo '<script>alert("Incorrect Email or Password");
-                        window.location="forms/login.php";
-                        </script>';
+                // If password or email does not match
+                echo '<script>alert("Incorrect Email or Password");
+                window.location="forms/login.php";
+                </script>';
                         
             }
-
+            // If user not found
             }else{
                 echo '<script>alert("User not found, please register");
         window.location="forms/register.php";
         </script>';
-        
-
-            }
-
-
-            
+            }   
     }
 
-
-    public function getUser($username){
-        $conn = $this->db->connect();
+//Method for get User
+    public function getUser(){
+        $conn = $this->connect();
         $sql = "SELECT * FROM users WHERE username = '$username'";
         $result = $conn->query($sql);
         if($result->num_rows > 0){
@@ -123,8 +116,12 @@ class UserAuth extends Dbh{
         }
     }
 
+
+//Method to get all user 
     public function getAllUsers(){
-        $conn = $this->db->connect();
+        //connection
+        $conn = $this->connect();
+        //select all from database
         $sql = "SELECT * FROM students";
         $result = $conn->query($sql);
         echo"<html>
@@ -139,54 +136,74 @@ class UserAuth extends Dbh{
         </thead></tr>";
         if($result->num_rows > 0){
             while($data = mysqli_fetch_assoc($result)){
+                $id = $data['id'];
+            
+
                 //show data
+
                 echo "<tr style='height: 20px'>".
-                    "<td style='width: 50px; background: gray'>" . $data['id'] . "</td>
-                    <td style='width: 150px'>" . $data['full_names'] .
-                    "</td> <td style='width: 150px'>" . $data['email'] .
-                    "</td> <td style='width: 150px'>" . $data['gender'] . 
-                    "</td> <td style='width: 150px'>" . $data['country'] . 
+                    "<td style='width: 50px; background: gray; text-align:center';'>" . $data['id'] . "</td>
+                    <td style='width: 150px; text-align:center';'>" . $data['full_names'] .
+                    "</td> <td style='width: 150px; text-align:center';'>" . $data['email'] .
+                    "</td> <td style='width: 150px; text-align:center';'>" . $data['gender'] . 
+                    "</td> <td style='width: 150px; text-align:center';'>" . $data['country'] . 
                     "</td>
-                    <td style='width: 150px'> 
-                    <form action='action.php' method='post'>
+                    <td style='width: 150px; text-align:center';'> 
+                    <form action='action.php' method='POST'>
                     <input type='hidden' name='id'" .
                      "value=" . $data['id'] . ">".
-                    "<button class='btn btn-danger' type='submit', name='delete'> DELETE </button> </form> </td>".
+                    "<button class='btn btn-danger' type='submit', name='delete'> <a href=action.php?deleteid='$data[id]' >Delete</a>  </button> </form> </td>".
                     "</tr>";
+                    //print_r($data['id']);
             }
             echo "</table></table></center></body></html>";
+            echo "<button style='background-color:wheat;'> <a href='dashboard.php'>Back</a> </button>  ";
+            
         }
     }
 
     public function deleteUser($id){
-        $conn = $this->db->connect();
-        $sql = "DELETE FROM Students WHERE id = '$id'";
-        if($conn->query($sql) === TRUE){
-            header("refresh:0.5; url=action.php?all");
+        $conn = $this->connect();
+        $sql = "DELETE FROM `students` WHERE `id` = $id";
+        $result = $conn->query($sql);
+        if($result){
+            echo '<script>alert("User Successfully Deleted");
+            window.location="dashboard.php";
+            </script>';
+        
         } else {
-            header("refresh:0.5; url=action.php?all=?message=Error");
+            echo '<script>alert("Fail to delete User");
+            window.location="dashboard.php";
+            </script>';
         }
     }
 
-    public function updateUser($email, $password){
-        $conn = $this->db->connect();
-        if($this->checkEmailExist($email)){
+    public function resetPassword($email, $password){
+        $conn = $this->connect();
+        if($this->checkEmailExist($email)== true){
+
+            $sql = "UPDATE `students` SET password = '$password' WHERE `email` = '$email'";
+            $result = $conn->query($sql);
+        if($result){
+            echo '<script>alert("Password Reset Successfully");
+            window.location="forms/login.php";
+            </script>';
+        } else {
+            echo '<script>alert("Technical Error, try again later");
+            window.location="forms/login.php";
+            </script>';
+        }
            
 
         }else{
             echo '<script>alert("User does not exist");
-            window.location="../forms/resetpassword.php";
+            window.location="forms/resetpassword.php";
             </script>';
 
         }
 
 
-        $sql = "UPDATE users SET password = '$password' WHERE username = '$username'";
-        if($conn->query($sql) === TRUE){
-            header("Location: ../dashboard.php?update=success");
-        } else {
-            header("Location: forms/resetpassword.php?error=1");
-        }
+        
     }
 
     public function getUserByUsername($username){
@@ -200,10 +217,10 @@ class UserAuth extends Dbh{
         }
     }
 
-    public function logout($username){
-        session_start();
+    public function logout(){
+        session_unset();
         session_destroy();
-        header('Location: index.php');
+        header('location:forms/login.php');
     }
 
    

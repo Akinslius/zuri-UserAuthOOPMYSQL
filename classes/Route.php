@@ -41,8 +41,8 @@ public function handleForm(){
         //     break;
         case isset($_POST['logout']):
             //unpack all data for logout
-            $this->email = $_POST['email'];
-            $this->logout($this->email);
+            // $this->email = $_POST['email'];
+            $this->logout();
             break;
         case isset($_POST['delete']):
             //unpack all data for deleting
@@ -94,6 +94,49 @@ class LoginController extends UserAuth{
         }
 
     }
+
+    class LogoutController extends UserAuth{
+
+        public function handleLogout(){
+            $this->logout();
+
+        }
+
+    }
+
+    class getAllController extends UserAuth{
+
+        public function handleGetAll(){
+            $this->getAllUsers();
+
+        }
+
+    }
+
+    class deleteController extends UserAuth{
+        private $id;
+
+        public function handleDelete(){
+            $this->id = $_SESSION['id'];
+            $this->deleteUser($this->id);
+
+        }
+
+    }
+
+    class ResetPasswordController extends UserAuth{
+        private $email;
+        public $password;
+
+        public function handleResetPassword(){
+            $this->email = $_POST['email'];
+            $this->password = $_POST['password'];
+            $this->resetPassword($this->email, $this->password);
+
+        }
+
+    }
+    
                
     //             break;
     //         case isset($_POST['logout']):
