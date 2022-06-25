@@ -30,7 +30,7 @@ if (!isset($_SESSION['fullname'])) {
     <ul class="navbar-nav">
       <li class="nav-item f-right">
       <form action="action.php" method="POST" style=" background-color: inherit">
-        <button type="submit" name="logout" style="background-color: transparent; border: none">Logout</button>
+        <button type="submit" name="logout" style="background-color: transparent; border: none; color:red;">Logout</button>
      </form>
       </li>
   </div>
@@ -47,7 +47,7 @@ if (!isset($_SESSION['fullname'])) {
          echo $_SESSION['fullname'] ; ?> </span> 
     </h1>
     <br>
-      <h2 style="align-content: center">
+      <h2 style="text-align:center">
         Here is a list of Students, their emails and Countries, Happey to Contact them?!
       </h2>
     </div>

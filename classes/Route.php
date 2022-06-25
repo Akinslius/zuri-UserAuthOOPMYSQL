@@ -1,7 +1,7 @@
 <?php
-
+// Class that handles the registration
 class FormController extends UserAuth{
-
+//Properties
 private $fullname;
 private $email;
 private $country;
@@ -9,6 +9,7 @@ private $gender;
 public $password;
 private $confirmPassword;
 
+//Method
 public function __construct($fullname,$email,$country,$gender,$password,$confirmPassword){
    $this->fullname= $fullname; 
    $this->email= $email; 
@@ -33,28 +34,7 @@ public function handleForm(){
             $this->country = $_POST['country'];
             $this->register($this->fullname, $this->email, $this->password, $this->confirmPassword, $this->country, $this->gender);
             break;
-        // case isset($_POST['login']):
-        //     //unpack all data for login
-        //     $this->email = $_POST['email'];
-        //     $this->password = $_POST['password'];
-        //     $this->login($this->email, $this->password);
-        //     break;
-        case isset($_POST['logout']):
-            //unpack all data for logout
-            // $this->email = $_POST['email'];
-            $this->logout();
-            break;
-        case isset($_POST['delete']):
-            //unpack all data for deleting
-            $this->email = $_POST['email'];
-            $this->deleteUser($this->email);
-            break;
-        case isset($_POST['reset']):
-            //unpack all data for updating password
-            $this->email = $_POST['email'];
-            $this->password = $_POST['password'];
-            $this->updateUser($this->email, $this->password);
-            break;
+       
         case isset($_POST['all']):
             //unpack all data for getting all users
             $this->getAllUsers();
@@ -69,10 +49,9 @@ public function handleForm(){
 }
 
 
-
+//Class the handles the login
 class LoginController extends UserAuth{
 
-    
     private $email;
     public $password;
     
@@ -95,24 +74,25 @@ class LoginController extends UserAuth{
 
     }
 
+    // Class that handles the logout
     class LogoutController extends UserAuth{
 
         public function handleLogout(){
             $this->logout();
 
         }
-
     }
 
+    //Class that handles getting all users in the database
     class getAllController extends UserAuth{
 
         public function handleGetAll(){
             $this->getAllUsers();
 
         }
-
     }
 
+    //Class that handles the delete 
     class deleteController extends UserAuth{
         private $id;
 
@@ -121,9 +101,8 @@ class LoginController extends UserAuth{
             $this->deleteUser($this->id);
 
         }
-
     }
-
+//Reseting password class
     class ResetPasswordController extends UserAuth{
         private $email;
         public $password;
@@ -134,38 +113,5 @@ class LoginController extends UserAuth{
             $this->resetPassword($this->email, $this->password);
 
         }
-
     }
     
-               
-    //             break;
-    //         case isset($_POST['logout']):
-    //             //unpack all data for logout
-    //             $this->email = $_POST['email'];
-    //             $this->logout($this->email);
-    //             break;
-    //         case isset($_POST['delete']):
-    //             //unpack all data for deleting
-    //             $this->email = $_POST['email'];
-    //             $this->deleteUser($this->email);
-    //             break;
-    //         case isset($_POST['reset']):
-    //             //unpack all data for updating password
-    //             $this->email = $_POST['email'];
-    //             $this->password = $_POST['password'];
-    //             $this->updateUser($this->email, $this->password);
-    //             break;
-    //         case isset($_POST['all']):
-    //             //unpack all data for getting all users
-    //             $this->getAllUsers();
-    //             break;
-    //         default:
-    //             echo 'No form was submitted';
-    //             break;
-    //     }
-    // }
-    
-    
-    // }
-
-

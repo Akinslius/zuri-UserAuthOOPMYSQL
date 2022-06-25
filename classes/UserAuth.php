@@ -6,7 +6,7 @@ session_start();
 
 class UserAuth extends Dbh{
    
-// Method fro checking if Email exist in database
+// Method for checking if Email exist in database
     public function checkEmailExist($email){
          $conn = $this->connect();
         //query
@@ -104,18 +104,6 @@ class UserAuth extends Dbh{
             }   
     }
 
-//Method for get User
-    public function getUser(){
-        $conn = $this->connect();
-        $sql = "SELECT * FROM users WHERE username = '$username'";
-        $result = $conn->query($sql);
-        if($result->num_rows > 0){
-            return $result->fetch_assoc();
-        } else {
-            return false;
-        }
-    }
-
 
 //Method to get all user 
     public function getAllUsers(){
@@ -135,11 +123,9 @@ class UserAuth extends Dbh{
             <thead class='thead-dark'> <th>ID</th><th>Full Names</th> <th>Email</th> <th>Gender</th> <th>Country</th> <th>Action</th>
         </thead></tr>";
         if($result->num_rows > 0){
+            // Show all data in the database using while loop
             while($data = mysqli_fetch_assoc($result)){
                 $id = $data['id'];
-            
-
-                //show data
 
                 echo "<tr style='height: 20px'>".
                     "<td style='width: 50px; background: gray; text-align:center';'>" . $data['id'] . "</td>
@@ -154,7 +140,7 @@ class UserAuth extends Dbh{
                      "value=" . $data['id'] . ">".
                     "<button class='btn btn-danger' type='submit', name='delete'> <a href=action.php?deleteid='$data[id]' >Delete</a>  </button> </form> </td>".
                     "</tr>";
-                    //print_r($data['id']);
+                
             }
             echo "</table></table></center></body></html>";
             echo "<button style='background-color:wheat;'> <a href='dashboard.php'>Back</a> </button>  ";
@@ -162,6 +148,7 @@ class UserAuth extends Dbh{
         }
     }
 
+    // Method for deleting a user
     public function deleteUser($id){
         $conn = $this->connect();
         $sql = "DELETE FROM `students` WHERE `id` = $id";
@@ -178,10 +165,13 @@ class UserAuth extends Dbh{
         }
     }
 
+    //Method for reseting password
     public function resetPassword($email, $password){
+        //connection
         $conn = $this->connect();
+        //Calling the CheckemailExist method to check if the user is present
         if($this->checkEmailExist($email)== true){
-
+            // If found, update the password of the user
             $sql = "UPDATE `students` SET password = '$password' WHERE `email` = '$email'";
             $result = $conn->query($sql);
         if($result){
@@ -194,7 +184,7 @@ class UserAuth extends Dbh{
             </script>';
         }
            
-
+        // If user not found
         }else{
             echo '<script>alert("User does not exist");
             window.location="forms/resetpassword.php";
@@ -206,22 +196,37 @@ class UserAuth extends Dbh{
         
     }
 
-    public function getUserByUsername($username){
-        $conn = $this->db->connect();
-        $sql = "SELECT * FROM users WHERE username = '$username'";
-        $result = $conn->query($sql);
-        if($result->num_rows > 0){
-            return $result->fetch_assoc();
-        } else {
-            return false;
-        }
-    }
-
+// Method for logout
     public function logout(){
         session_unset();
         session_destroy();
         header('location:forms/login.php');
     }
+
+    // public function getUserByUsername($username){
+    //     $conn = $this->db->connect();
+    //     $sql = "SELECT * FROM users WHERE username = '$username'";
+    //     $result = $conn->query($sql);
+    //     if($result->num_rows > 0){
+    //         return $result->fetch_assoc();
+    //     } else {
+    //         return false;
+    //     }
+    // }
+
+
+    //Method for get User 
+    // public function getUser(){
+    //     $conn = $this->connect();
+    //     $sql = "SELECT * FROM users WHERE username = '$username'";
+    //     $result = $conn->query($sql);
+    //     if($result->num_rows > 0){
+    //         return $result->fetch_assoc();
+    //     } else {
+    //         return false;
+    //     }
+    // }
+    
 
    
 
